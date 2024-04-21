@@ -1,0 +1,437 @@
+---
+title: "Zipfian distributions and their generating processes"
+author: "Henri Kauhanen"
+date: "13 March 2024"
+date-format: "D MMMM YYYY"
+bibliography: b.bib
+csl: chicago-fullnote-bibliography-henri.csl
+suppress-bibliography: true
+link-citations: false
+format:
+  revealjs: 
+    theme: [default, custom.scss]
+    slide-number: "c"
+    auto-animate: true
+    html-math-method: katex
+---
+
+
+## Zipf's Law [@Zipf1949]
+
+::: {.r-stack}
+![](img/zipf.png){height=450px}
+
+![](img/zipf_loglog.png){.fragment height=450px}
+
+![](img/zipf_annotated.png){.fragment height=450px}
+
+::: {.fragment .bg-translucent .bordered}
+$$
+p(r) \propto r^{-\alpha}
+$$
+:::
+:::
+
+
+## {transition="zoom-in slide-out"}
+
+::: {#piantadosi-quote}
+"such distributions have been
+argued to arise from **random concatenative processes** (Conrad
+& Mitzenmacher, 2004; Li, 1992; Miller, 1957), **mixtures of
+exponential distributions** (Farmer & Geanakoplos, 2006),
+**scale-invariance** (Chater & Brown, 1999), **(bounded) optimization of entropy** (Mandelbrot, 1953) **or Fisher information**
+(Hernando, Puigdomènech, Villuendas, Vesperinas & Plastino,
+2009), **the invariance of such power laws under aggregation**
+(see Farmer & Geanakoplos, 2006), **multiplicative stochastic
+processes** (see Mitzenmacher, 2004), **preferential reuse**
+(Simon, 1955; Yule, 1944), **symbolic descriptions of complex
+stochastic systems** (Corominas-Murtra & Solé, 2010), **random
+walks on logarithmic scales** (Kawamura & Hatano, 2002),
+**semantic organization** (Guiraud, 1968; D. Manin, 2008), **communicative optimization** (Ferrer i Cancho, 2005a, b; Ferrer i
+Cancho & Solé, 2003; Mandelbrot, 1962; Salge, Ay, Polani, &
+Prokopenko, 2013; Zipf, 1936, 1949), **random division of
+elements into groups** (Baek, Bernhardsson & Minnhagen
+2011), **first- and second-order approximation of most common
+(e.g., normal) distributions** (Belevitch, 1959), and **optimized
+memory search** (Parker-Rhodes & Joyce, 1956), **among many
+others**" [@Piantadosi2014]
+:::
+
+
+## In this talk {transition="slide-in none-out"}
+
+I will illustrate two mechanisms:
+
+1. Cost minimization
+1. Preferential attachment
+
+. . . 
+
+This will be followed by an application to **language change**
+
+
+## "Vocabulary balance" [@Zipf1949] [@FerreriCanchoSole2002]
+
+A conflict of two forces:
+
+- the speaker will want an **economical** lexicon
+  - few words
+  - as short words as possible
+
+. . .
+
+- the hearer will want a **transparent** lexicon
+  - ideally, 1-to-1 correspondence between form and meaning
+
+
+## Word cost
+
+Zipf's Law relates:
+
+::: {.r-stack}
+$$
+r \mapsto p
+$$
+
+::: {.fragment .bg-white}
+$$
+r \mapsto c \mapsto p
+$$
+:::
+:::
+
+. . . 
+
+To keep things simple, assume
+$$
+c = \text{length of word}
+$$
+
+
+## Law of Abbreviation [@Zipf1949] [@Mandelbrot1961]
+
+**Proposition.** Cost and probability are related as
+
+::: {.r-stack}
+$$
+c \propto - \log (p).
+$$
+
+::: {.fragment .bg-white}
+$$
+p \propto \exp(-\beta c)
+$$
+:::
+:::
+
+. . . 
+
+**Probability decreases exponentially with cost.** 
+
+If cost = length, then frequent words are shorter.
+
+
+## "Law of Order"
+
+Suppose moreover that
+$$
+c \propto \log (\gamma r),
+$$
+so that **cost increases logarithmically in rank**.
+
+Intuitively: words are ranked so that longer words have greater ranks.
+
+
+## Putting two and two together
+
+So we (assume to) have:
+
+①  $p \propto \exp(-\beta c)$ (Law of Abbreviation)
+
+②  $c \propto \log(\gamma r)$ (Law of Order)
+
+. . . 
+
+Together, these imply
+$$
+p \propto \exp(-\beta\log(\gamma r)) \propto r^{-\beta},
+$$
+deriving Zipf's Law.
+
+
+## ② $c \propto \log (\gamma r)$ (Law of Order)
+
+. . .
+
+@Mandelbrot1961 proves special case: any word constructed out of a finite alphabet is a possible word
+
+. . . 
+
+@FerrerBentzSeguin2022: non-singular codes which minimize **average cost**,
+$$
+C = \sum_i p_i c_i
+$$
+
+
+## ① $p \propto \exp(-\beta c)$ (Law of Abbreviation)
+
+. . . 
+
+No **unique** process gives rise to this relationship!
+
+. . .
+
+To illustrate:
+
+1. Random typing
+1. "Word growth dynamics"
+
+
+## Miller's monkeys [@Miller1957] [@Mandelbrot1961]
+
+Assume $M$ equally frequent symbols plus a space:
+
+- space occurring with probability $p_0$
+- each proper symbol occurring with probability $(1 - p_0)/M$
+
+. . . 
+
+Then (any) word of length $c$ has probability
+$$
+p_c = p_0 \left(\frac{1 - p_0}{M} \right)^c.
+$$
+
+
+## Miller's monkeys
+
+But
+$$
+p_c = p_0 \left(\frac{1 - p_0}{M} \right)^c = p_0 \exp(-\beta c)
+$$
+where
+$$
+\beta = \log \left(\frac{M}{1 - p_0}\right).
+$$
+
+. . . 
+
+Hence, the Law of Abbreviation (and hence, Zipf's Law) has been derived.
+
+
+## A model of "word growth dynamics" [@Mandelbrot1961]
+
+A simple random walk model:
+
+- start with (say) 50,000 words all of length 5 symbols
+- at each time step, word...
+  - gains a symbol with probability $\sigma^+$
+  - loses a symbol with probability $\sigma^-$
+  - exception: length 0 is a **reflecting boundary** where $\sigma^- = 0$
+
+. . . 
+
+Is there a stationary distribution for $p_c =$ Prob(word is of length $c$)?
+
+
+---
+
+::: {.r-stack}
+![](img/mandelevo_first.png)
+
+![](img/mandelevo.gif){.fragment}
+
+::: {.fragment .bg-translucent .bordered}
+ICBS: assuming $\sigma^+ < \sigma^-$, then, in the limit of infinite time,
+$$
+p_c \approx K \exp(-\beta c)
+$$
+with $K = p_0 = 1 - \sigma^+/\sigma^-$ and $\beta = -\log(\sigma^+/\sigma^-)$.
+
+Thus we have again derived the Law of Abbreviation and hence Zipf's Law.
+:::
+:::
+
+
+## Power laws are (or, can be) everywhere {transition="zoom-in"}
+
+Asymptotically equivalent formulation of Zipf's Law, the **"sister law"**: [@MorenoSanchezEtAl2016]
+$$
+p(f) \propto f^{-A}
+$$
+where $A = 1 + 1/\alpha$.
+
+This gives the **probability of a word having frequency $f$**.
+
+
+---
+
+::: {.r-stack}
+![](img/sister_zipf.png)
+
+::: {.fragment .bg-translucent .bordered}
+By extension, we can (in principle) have Zipfian distributions of basically anything "measurable":
+$$
+p(m) \propto m^{-A}
+$$
+:::
+
+::: {.fragment .bg-translucent .bordered .smol}
+![](img/lego.png){width=600px}
+
+Stefan J. Kautsch, Dimitri Veras, and Kyle K. Hansotia, “The Pedagogical Representation of Mass Functions with LEGO and Their Origin,” _European Journal of Physics_ 42 (2021): 035605
+:::
+:::
+
+
+## Preferential attachment [@Yule1925] [@Simon1955] [@BarabasiAlbert1999]
+
+Suppose $m$ is the number of people you speak to in some relevant time interval.
+
+What is the distribution of $p(m)$ (from person to person)? How does it arise?
+
+. . . 
+
+Fundamental idea: the probability of a new person befriending you is proportional to the number of friends you already have.
+
+
+## Preferential attachment
+
+The Barabási--Albert algorithm:
+
+1. Start with $n_0$ people in the network.
+1. At each time step, add a new person with $n$ friends, such that the probability of connecting to an individual with $k$ friends is $\propto k$.
+
+. . . 
+
+Then, at time step $t$, one has [@BarabasiEtAl1999]
+$$
+p(m) \approx \frac{2n^2t}{n_0 + t} m^{-3} \stackrel{t \to \infty}{\longrightarrow} 2n^2m^{-3}
+$$
+
+
+## Application: Strength of selection in near-neutral evolution
+
+Do preferentially attached speech communities speed up or slow down language change?
+
+
+## Application: Strength of selection in near-neutral evolution
+
+**Simple model.** Each person speaks either $X$ or $Y$. Dyadic interactions, with "reaction equations"
+$$
+\begin{split}
+X + X &\to X + X \\
+Y + Y &\to Y + Y \\
+X + Y &\stackrel{\xi}{\to} X + X \\
+X + Y &\stackrel{\upsilon}{\to} Y + Y
+\end{split}
+$$
+
+. . . 
+
+Suppose $\upsilon \gtrsim \xi$. Starting with a mostly-$X$ community, what is the probability that eventually everyone speaks $Y$?
+
+
+## Application: Strength of selection in near-neutral evolution
+
+The answer is known (analytically) when everyone is everyone's friend.
+
+It is the fixation probability of a simple birth--death process. [@KarlinTaylor1975] In this case:
+$$
+P(\text{all } Y \text{ at some } t) = \frac{1 - \left(\frac{\xi}{\upsilon}\right)^{y_0}}{1 - \left(\frac{\xi}{\upsilon}\right)^N}
+$$
+where $y_0$ is the initial number of $Y$-speakers, and $N$ is the total number of speakers (assumed constant).
+
+
+## Application: Strength of selection in near-neutral evolution
+
+What happens when we have social network structure?
+
+. . . 
+
+**Simulations.** Interpolate between Barabási--Albert network and a fully connected graph using parameter $r$:
+
+- in addition to the BA process, connect each speaker to $r(N-1)$ speakers sampled at random without replacement
+- then $z = -\log (r)$ is the "Zipfness" of the network
+  - $z = 0$: fully connected graph
+  - $z \to \infty$: pure Barabási--Albert (scale-free, i.e. "Zipfian") network
+
+
+---
+
+::: {.r-stack}
+![](img/r_values_first.png){height=650px}
+
+![](img/r_values.gif){.fragment height=650px}
+:::
+
+
+## Application: Strength of selection in near-neutral evolution
+
+Once network is ready, run the interaction model:
+
+- 3 (out of 300) innovators: the 3 best-connected people
+- run until fixation (in either $X$ or $Y$) or until maximum step
+- repeat 1,000 times, calculate proportion of runs fixating in $Y$
+
+
+---
+
+::: {.r-stack}
+![](img/results_1.png){height=650px}
+
+![](img/results_2.png){.fragment height=650px}
+
+![](img/results_3.png){.fragment height=650px}
+
+![](img/results_4.png){.fragment height=650px}
+
+![](img/results.gif){.fragment height=650px}
+:::
+
+
+## Application: Strength of selection in near-neutral evolution
+
+Thus, common "well-mixed" models may seriously underestimate selection effects in language change.
+
+. . . 
+
+But not just that!
+
+One can also unveil unexpected(?) results such as a nonmonotonic dependency of fixation time on Zipfness
+
+---
+
+::: {.r-stack}
+![](img/results_time_first.png){height=650px}
+
+![](img/results_time.gif){.fragment height=650px}
+:::
+
+
+## In summary
+
+Zipfian distributions can arise through many kinds of mechanisms...
+
+. . . 
+
+...only some of which are relevant in any given empirical case!
+
+. . . 
+
+Here, we've illustrated two processes that lead to Zipf:
+
+- optimization of cost
+- preferential attachment
+
+. . . 
+
+Interesting avenues for future research:
+
+- linguistically realistic processes that lead to Zipf
+- what do social networks optimize for?
+
+
+## {transition="zoom-in"}
+
+![](img/thanks.png){height=650px}
